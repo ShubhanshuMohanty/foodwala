@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}layout{% endblock %}</title>
+    <style>
+
+          .custom-navbar {
+            background-color: #2E8B57; /* Sea Green color */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          }
+
+          .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+          }
+
+          .profile-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #1a5c38;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+          }
+
+          .search-bar {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+          }
+
+          .search-bar::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+          }
+
+          .search-btn {
+            background-color: #1a5c38;
+            border-color: #1a5c38;
+          }
+
+          .nav-link {
+            font-weight: 500;
+            transition: all 0.3s ease;
+          }
+
+          .nav-link:hover {
+            transform: translateY(-2px);
+          }
+
+          .dropdown-item:active {
+            background-color: #2E8B57;
+          }
+          .profile-card {
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .profile-header {
+            background-color: #2E8B57;
+            color: white;
+            border-radius: 15px 15px 0 0;
+            padding: 20px;
+        }
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid white;
+            background-color: #e9ecef;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+        }
+        .info-card {
+            transition: all 0.3s;
+        }
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            margin-right: 15px;
+        }
+      {% block styles %}
+      {% endblock %}
+    </style>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark custom-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          <i class="fas fa-utensils me-2"></i>FoodTracker
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarMain"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMain">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" href="{% url 'food_table' %}">
+                <i class="fas fa-table me-1"></i>Food Table
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'calculate_calories' %}">
+                <i class="fas fa-calculator me-1"></i>Calories Calculator
+              </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'search' %}">
+                  <i class="fas fa-search"></i>Calories Calculator
+                </a>
+              </li>
+          </ul>
+
+
+          <!-- Profile Dropdown -->
+          <div class="dropdown">
+            <a
+              class="btn btn-outline-light dropdown-toggle d-flex align-items-center"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+            >
+              <div class="profile-icon">
+                <i class="fas fa-user"></i>
+              </div>
+              Profile
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <a class="dropdown-item" href="{% url 'profile' %}"
+                  ><i class="fas fa-user-circle me-2"></i>My Profile</a
+                >
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a class="dropdown-item text-danger" href="#"
+                  ><i class="fas fa-sign-out-alt me-2"></i>Logout</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+    {% block content %} {% endblock %}
+  </body>
+</html>

@@ -1,0 +1,24 @@
+{% if messages %}
+<div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;">
+    {% for message in messages %}
+    <div class="toast-message {{ message.tags }}" 
+        style="background: #333; color: #fff; padding: 10px; margin-bottom: 10px; border-radius: 5px; margin-bottom: 5px;">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let toasts = document.querySelectorAll(".toast-message");
+        toasts.forEach(function(toast) {
+            setTimeout(() => {
+                toast.style.display = "none";
+            }, 3000); // 3 sec ke baad hide ho jayega
+            toast.addEventListener("click", function() {
+                this.style.display = "none"; // Click karne pe hide ho jayega
+            });
+        });
+    });
+</script>
+{% endif %}

@@ -1,0 +1,92 @@
+
+{% extends "layouts.html" %}
+
+</html>
+{% block style %}
+
+  .total-row {
+    font-weight: bold;
+    background-color: #f8f9fa;
+  }
+
+{% endblock  %}
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">Nutritions table</h2>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th>Recipe Name</th>
+              <th>Protein (g)</th>
+              <th>Calories</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="recipe-list">
+            {% for meal in meals %}
+            <tr>
+              <td>{{meal.recipe_title}}</td>
+              <td>{{meal.protein}}</td>
+              <td>{{meal.calories}}</td>
+              <td>
+                {% comment %} <button class="btn btn-sm btn-outline-primary me-1">
+                  <i class="fas fa-plus"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-secondary me-1">
+                  <i class="fas fa-minus"></i>
+                </button> {% endcomment %}
+                <button class="btn btn-sm btn-danger" id="delete-recipe"
+                data-url="{% url 'delete_meal' meal.recipe_title %}" 
+                onclick="deleteRecipe(this)">
+                  <i class="fas fa-trash"></i> Delete
+                </button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot class="total-row">
+            <tr>
+              <td>Total</td>
+              <td id="total-protein">{{total_data.tot_protein}}</td>
+              <td id="total-calories">{{total_data.tot_calories}}</td>
+              <td></td>
+            </tr>{{total_data.tot_calories}}
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
+  rel="stylesheet"
+/>
+<script>
+  const deleteRecipe = async(button) => {
+    url = button.getAttribute('data-url');
+    console.log(url);
+    try
+    {
+      const response = await fetch(url, {
+        method: "DELETE",
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+      });
+
+      if (response.ok) {
+        button.closest("tr").remove();
+      } else {
+        console.error("Delete failed");
+      }
+    }
+    catch (error)
+    {
+      console.error('Error:', error);
+    }
+  };
+</script>
+{% endblock  %}
