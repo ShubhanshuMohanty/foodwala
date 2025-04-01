@@ -132,15 +132,23 @@ background: linear-gradient( 0deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%
         <div class="display-4 text-warning">70%</div>
         {% comment %} <form  method="POST" > {% endcomment %}
           {% comment %} {% csrf_token %} {% endcomment %}
+          {% if not is_paid %}
+          <button class="btn btn-danger px-4 py-2 rounded-pill" onclick=getMembership()>
+            <i class="fas fa-heart me-2"></i>Get Premium Membership to add items to the food table
+          </button>
+          {% else %}
           <button type="submit" id="addMealBtn" class="btn btn-danger px-4 py-2 rounded-pill">
             <i class="fas fa-heart me-2"></i> Add to Your Meal
           </button>
+          {% endif %}
+          
         {% comment %} </form> {% endcomment %}
         
       </div>
     </div>
   </div>
 </div>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
   document.getElementById("addMealBtn").addEventListener("click", function () {
       fetch("{% url 'add_to_meal' %}", {
@@ -167,8 +175,46 @@ background: linear-gradient( 0deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%
       });
       
   });
-
+  
   console.log("recipe_title:", "{{ recipe.title }}"
       )
+   async function getMembership()
+   {
+    
+    try
+    {
+      let response = await fetch('{% url "create_payment" %}', {method:"POST"})
+      let data = await response.json()
+      console.log("Payment data:",data)
+      var options = {
+        "key": data.razorpay_key_id,
+        "amount": data.amount, 
+        "currency": "INR",
+        "name": "Geeky Shows",
+        "description": "Test Transaction",
+        "order_id": data.order_id,
+        "callback_url": data.razorpay_callback_url,
+        "prefill": { 
+            "name": data.name,
+            "email": data.product_name,
+            "contact": data.phone
+        },
+        "notes": {
+            "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+      };
+      console.log("Options:",options)
+      var rzp1 = new Razorpay(options);
+      rzp1.open();
+    }
+    catch(error)
+    {
+      console.error("Error:", error)
+      alert("An error occurred while adding the recipe to meal!",error);
+    }
+   }
   </script>
 {%endblock%}

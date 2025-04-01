@@ -4,6 +4,7 @@ from .forms import CustomUserCreationForm, CustomLoginForm, ProfileForm
 from .models import Profile as UserProfile
 from .middlewares import guest,auth
 from calaries_tracker.utils import get_logged_in_user_email
+from recipe_data.models import  premium_member
 def register_view(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -27,6 +28,8 @@ def create_profile(request):
             user=request.user
             user_profile=UserProfile(user=user,name=name,phone=phone,weight=weight,height=height,age=age)
             user_profile.save()
+            pm=premium_member.objects.create(user=user)
+            pm.save()
             return redirect('search')
     else:
         form=ProfileForm()
