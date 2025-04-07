@@ -9,6 +9,7 @@ urlpatterns = [
     path('calculator/',include('calaries_tracker.urls'),name='calculator'),
     path('users/', include('user_auth.urls'),name='users'),
     path('navbar/',views.navbar,name='navbar'),
+    path("",include('allauth.urls')),
     # path('account/',include('accounts.urls')),
     # path('search/',search)
 ]

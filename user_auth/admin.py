@@ -3,7 +3,7 @@ from .models import CustomUser,Profile
 # Register your models here.
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
-    list_display=['email','password']
+    list_display=['email','password','is_active','is_staff','username']
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
