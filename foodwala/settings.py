@@ -40,8 +40,17 @@ INSTALLED_APPS = [
     'recipe_data',
     'calaries_tracker',
     'user_auth',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
 ]
-
+AUTHENTICATION_BACKENDS = [
+    
+    'allauth.account.auth_backends.AuthenticationBackend', 
+    'django.contrib.auth.backends.ModelBackend',
+]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -50,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'foodwala.urls'
@@ -138,3 +148,50 @@ from decouple import config
 RAZORPAY_KEY_ID=config("RAZORPAY_KEY_ID")
 RAZORPAY_KEY_SECRET=config("RAZORPAY_KEY_SECRET")
 RAZORPAY_CALLBACK_URL = "http://127.0.0.1:8000/search/payment-verify/"
+
+#Social login settings
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': config('GOOGLE_CLIENT_ID'),
+            'secret': config('GOOGLE_CLIENT_SECRET'),
+          
+        },
+        'SCOPE': ['profile','email',],
+        'AUTH_PARAMS': {'access_type': 'online'},
+        'METHOD': 'oauth2',
+        'VERIFIED_EMAIL': True,
+        # 'OVERRIDE_AUTHENTICATION_METHOD': 'email',
+    },
+    'github': {
+        'APP': {
+            'client_id': '',
+            'secret': '',
+           
+        }
+    }
+   
+}
+
+SOCIALACCOUNT_LOGIN_ON_GET=True
+LOGIN_REDIRECT_URL = 'home'
+# LOGIN_URL = 'login'
+SOCIALACCOUNT_AUTO_SIGNUP = True
+
+# # allauth settings
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # username field disable
+# ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_USERNAME_REQUIRED = False
+# New django-allauth settings format
+# ACCOUNT_LOGIN_METHODS = {'email'}  # ✅ Only allow email login
+
+# ACCOUNT_SIGNUP_FIELDS = [
+#     'email*',  # ✅ Required field (* indicates required)
+#     'password1*',
+#     'password2*'
+# ]
+# ACCOUNT_USERNAME_REQUIRED = False  # Username की जरूरत नहीं है
+# ACCOUNT_AUTHENTICATION_METHOD = "email"  # सिर्फ email से login
+# ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']

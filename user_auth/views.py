@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from .forms import CustomUserCreationForm, CustomLoginForm, ProfileForm
-from .models import Profile as UserProfile
+from .models import Profile as UserProfile,CustomUser
 from .middlewares import guest,auth
 from calaries_tracker.utils import get_logged_in_user_email
 from recipe_data.models import  premium_member
