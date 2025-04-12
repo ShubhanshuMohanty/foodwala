@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-@9_hs)mv5rnhwm3codb03oc6j0p&vo5i%vgyyh#5m^hlqbn8!i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'recipebycalories.onrender.com']
 
 
 # Application definition
