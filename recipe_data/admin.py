@@ -3,7 +3,7 @@ from .models import Meal,premium_member
 # Register your models here.
 @admin.register(Meal)
 class MealAdmin(admin.ModelAdmin):
-    list_display=['user','recipe_title','calories','protein','fat','carbs','created_at']
+    list_display=['id','user','recipe_title','calories','protein','fat','carbs','created_at']
     search_fields=['user','recipe_title']
 
 @admin.register(premium_member)

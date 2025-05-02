@@ -193,19 +193,22 @@ def add_to_meal(request):
 
 @csrf_exempt
 def delete_meal(request, title):
-    decoded_title = unquote_plus(title)
+    # decoded_title = unquote_plus(title)
     print("\n\n\ntitle=", title)
-    print("\n\n\ndecoded_title=", decoded_title)
+    # print("\n\n\ndecoded_title=", decoded_title)
     try:
         if request.method == "DELETE":
-            meal = get_object_or_404(Meal, user=request.user, recipe_title=title)
+            meal = get_object_or_404(Meal, user=request.user, id=title)
             # meal = Meal.objects.get(title=decoded_title)
-            # meal = Meal.objects.filter(title=decoded_title, user=request.user)
+            # meal = Meal.objects.filter(title=decoded_title, user=request.user).first()
             print("\n\n\nmeal=", meal)
 
-            meal.delete()
-            print("\n\n\nmeal deleted")
-            return JsonResponse({"message": "Meal deleted successfully!"})
+            if meal:
+                meal.delete()
+                print("\n\n\nmeal deleted")
+                return JsonResponse({"message": "Meal deleted successfully!"})
+            else:
+                return JsonResponse({"error": "Meal not found"}, status=404)
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
 
@@ -271,3 +274,28 @@ class PaymentCallbackView(View):
                 return JsonResponse({"status": "failed"})
         else:
             return JsonResponse({"status": "failed!!"})
+        
+
+def fetch_dishes(request):
+    query= request.GET.get("query", "").lower()
+    if not query:
+        return JsonResponse({"error": "No query provided"}, status=400)
+    api_url = f"https://api.spoonacular.com/recipes/complexSearch?query={query}"
+    api_key = "e1567f12699e4d64b65deff4634c8b1b"
+    try:
+        response = requests.get(api_url, params={"apiKey": api_key})
+        data = response.json()
+        # **Filtered Data**
+        filtered_data = []
+        for recipe in data["results"]:
+            filtered_data.append(
+                {
+                    "id": recipe["id"],
+                    "title": recipe["title"],
+                    "image": recipe["image"],
+                }
+            )
+        return render(request, "recipeList.html", {"recipes": filtered_data})
+        # return JsonResponse({"recipes": filtered_data})
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)

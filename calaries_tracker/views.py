@@ -46,6 +46,28 @@ def calculate_calories(request):
             
 
     else:
-        form = CalorieCalculatorForm()
+        profile=Profile.objects.get(user=request.user)
+        weight=profile.weight
+        height=profile.height
+        age=profile.age
+        gender=profile.get_gender_display()
+        print("\n\n\n\n\n\n\n\nweight=",weight)
+        print("height=",height)
+        print("age=",age)
+        print("gender",gender)
+        if profile:
+           print("profile=",profile)
+           form = CalorieCalculatorForm(initial={
+               "age": age,
+               "weight": weight,
+               "height": height,
+               "gender":gender
+
+           })
+           print("form=",form)
+        else:
+            print("profile not found")
+            form = CalorieCalculatorForm() 
+        # form = CalorieCalculatorForm()
 
     return render(request, "calculator_form.html", {"form": form, "bmr": bmr, "tdee": tdee})
