@@ -13,9 +13,15 @@ def register_view(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
-            return redirect('create_profile')
+            print("user=",user)
+            print("pass=",form.cleaned_data['password1'])
+            user=authenticate(request, email=user.email, password=form.cleaned_data['password1'])
+            print("user=",user)
+            if user:
+                login(request, user)
+                return redirect('create_profile')
     else:
+        print("post nahi hai")
         form = CustomUserCreationForm()
     return render(request, 'users/register.html', {'form': form})
 

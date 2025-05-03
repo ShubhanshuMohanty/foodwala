@@ -4,15 +4,21 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from .models import CustomUser  # aapke custom model ka import
+
 class CustomUserCreationForm(UserCreationForm):
+
     class Meta:
-        model = User
+        model = CustomUser
         fields = ['email', 'password1', 'password2']
         widgets = {
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter your email'}),
             'password1': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter password'}),
             'password2': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm password'}),
         }
+
 
 class CustomLoginForm(AuthenticationForm):
     username = forms.EmailField(label="Email", widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter your email'}))
