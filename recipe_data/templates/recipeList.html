@@ -36,11 +36,11 @@ i { transform: scale(1.2); } {% endblock %} {% block content %}
           <h5 class="card-title">
             <i class="fa-solid fa-utensils me-2"></i> {{ recipe.title }}
           </h5>
-          <p class="text-muted">
+          {% comment %} <p class="text-muted">
             <i class="fa-regular fa-clock me-1"></i> {{ recipe.time }} |
             <i class="fa-solid fa-chart-simple me-1"></i> {{ recipe.difficulty
             }}
-          </p>
+          </p> {% endcomment %}
           <div>
             {% for ing in recipe.ingredients %}
             <span class="ingredient-tag">{{ ing }}</span>

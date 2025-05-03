@@ -1,5 +1,153 @@
 {% extends "layouts.html" %}
 {% block title %}Home{% endblock %}
 {% block content %}
-    <h1>Home</h1>
+<section class="hero-section text-center">
+    <div class="container">
+        <h1 class="hero-title">Find the Perfect Recipe with Your Ingredients</h1>
+        <p class="lead mb-5">Type your ingredients and discover delicious recipes with complete nutrition information</p>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <form method="get" class="input-group mb-3" action="/search/fetch_dishes/">
+                    {% comment %} {% csrf_token %} {% endcomment %}
+                    {% comment %} <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"> {% endcomment %}
+                    <input type="text" class="form-control search-box" placeholder="Enter your ingredients (e.g., potato, onion, tomato)" name="query">
+                    <button class="btn btn-primary search-btn ms-3" type="submit">
+                        <i class="fas fa-search me-2"></i>Find Recipes
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4">
+                <div class="card stat-card text-center py-4">
+                    <div class="card-body">
+                        <i class="fas fa-utensils stat-icon"></i>
+                        <h2 class="stat-number">10,000+</h2>
+                        <p class="text-muted">Delicious Recipes</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card stat-card text-center py-4">
+                    <div class="card-body">
+                        <i class="fas fa-users stat-icon"></i>
+                        <h2 class="stat-number">500,000+</h2>
+                        <p class="text-muted">Happy Users</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card stat-card text-center py-4">
+                    <div class="card-body">
+                        <i class="fas fa-apple-alt stat-icon"></i>
+                        <h2 class="stat-number">2,500+</h2>
+                        <p class="text-muted">Ingredients in Database</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Wave Divider -->
+{% comment %} <div class="wave-top">
+    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+    </svg>
+</div> {% endcomment %}
+
+<!-- Pricing Section -->
+<section class="wave-section py-5">
+    <div class="container">
+        <h2 class="text-center mb-5 fw-bold">Choose Your Plan</h2>
+        <div class="row g-4 justify-content-center">
+            <!-- Free Plan -->
+            <div class="col-lg-5">
+                <div class="pricing-card h-100">
+                    <div class="pricing-header free-header text-center">
+                        <h3 class="fw-bold">Free Plan</h3>
+                        <div class="price">₹0<span class="fs-5">/month</span></div>
+                        <p>Perfect for casual cooking</p>
+                    </div>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Basic recipe search
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Up to 5 searches per day
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Basic nutrition information
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-times-circle text-muted me-2"></i>
+                            Save favorite recipes
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-times-circle text-muted me-2"></i>
+                            Meal planning features
+                        </div>
+                        <div class="text-center mt-4">
+                            <button class="btn btn-outline-primary btn-lg px-4">Get Started</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Premium Plan -->
+            <div class="col-lg-5">
+                <div class="pricing-card premium h-100">
+                    <div class="pricing-header premium-header text-center">
+                        <h3 class="fw-bold">Premium Plan</h3>
+                        <div class="price">₹200<span class="fs-5">/month</span></div>
+                        <p>For cooking enthusiasts</p>
+                    </div>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Advanced recipe search
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Unlimited searches
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Detailed nutrition analysis
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Save unlimited favorite recipes
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Weekly meal planning tools
+                        </div>
+                        <div class="text-center mt-4">
+                            <button class="btn btn-primary btn-lg px-4">Start Free Trial</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white text-center">
+    <div class="container">
+        <h2 class="fw-bold mb-4">Ready to Transform Your Cooking Experience?</h2>
+        <p class="lead mb-4">Join thousands of happy users who discover delicious recipes every day</p>
+        <button class="btn btn-light btn-lg px-4">Get Started Now</button>
+    </div>
+</section>
 {% endblock %}

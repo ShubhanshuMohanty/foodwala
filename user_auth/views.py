@@ -5,14 +5,23 @@ from .models import Profile as UserProfile,CustomUser
 from .middlewares import guest,auth
 from calaries_tracker.utils import get_logged_in_user_email
 from recipe_data.models import  premium_member
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
 def register_view(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
-            return redirect('create_profile')
+            print("user=",user)
+            print("pass=",form.cleaned_data['password1'])
+            user=authenticate(request, email=user.email, password=form.cleaned_data['password1'])
+            print("user=",user)
+            if user:
+                login(request, user)
+                return redirect('create_profile')
     else:
+        print("post nahi hai")
         form = CustomUserCreationForm()
     return render(request, 'users/register.html', {'form': form})
 
@@ -50,6 +59,7 @@ def login_view(request):
         form = CustomLoginForm()
     return render(request, 'users/login.html', {'form': form})
 
+
 def logout_view(request):
     logout(request)
     return redirect('home')
@@ -57,7 +67,27 @@ def logout_view(request):
 
 @auth
 def profile_view(request):
-    email=get_logged_in_user_email(request)
-    user=UserProfile.objects.get(user__email=email)
+    user=None
+    try:
+        email=get_logged_in_user_email(request)
+        user=UserProfile.objects.get(user__email=email)
+    except UserProfile.DoesNotExist:
+        return redirect('create_profile')
 
     return render(request,'users/profile.html',{'user':user})
+
+def generate_pdf(request):
+    user=UserProfile.objects.get(user=request.user)
+    template_path = 'users\pdf_template.html'
+    context = {'user':user}
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = ' filename="my_pdf.pdf"'
+
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+        return HttpResponse('Error generating PDF', status=500)
+    return response

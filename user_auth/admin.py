@@ -7,4 +7,4 @@ class CustomUserAdmin(admin.ModelAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display=['user','name','phone','weight','height','age','gender','calories','bmr']
+    list_display=['user','name','phone','weight','height','age','gender','calories','bmr','activity_level']

@@ -19,7 +19,8 @@
             {% csrf_token %}
             <div class="mb-3">{{ form.email.label_tag }} {{ form.email }}</div>
             <div class="mb-3">
-              {{ form.password1.label_tag }} {{ form.password1 }}
+              {{ form.password1.label_tag }}
+               {{ form.password1 }}
             </div>
             <div class="mb-3">
               {{ form.password2.label_tag }} {{ form.password2 }}

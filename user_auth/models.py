@@ -36,6 +36,13 @@ class Profile(models.Model):
         ('F', 'Female'),
         ('O', 'Other'),
     ]
+    ACTIVITY_CHOICES = [
+        ("sedentary", "Sedentary (No exercise)"),
+        ("light", "Light (1-3 days/week)"),
+        ("moderate", "Moderate (3-5 days/week)"),
+        ("active", "Active (6-7 days/week)"),
+        ("very_active", "Very Active (Athlete)"),
+    ]
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=15)
@@ -45,6 +52,7 @@ class Profile(models.Model):
     gender=models.CharField(max_length=10,choices=GENDER_CHOICES,default='M')
     bmr=models.FloatField(null=True,default=0)
     calories=models.FloatField(null=True,default=0)
+    activity_level=models.CharField(max_length=100,choices=ACTIVITY_CHOICES,default='moderate')
 
     def __str__(self):
         return self.user.email
