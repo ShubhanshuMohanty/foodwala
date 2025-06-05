@@ -112,6 +112,8 @@
 </div>
 
 <script>
+  let selectedIngredients = new Set();
+
     // Search functionality
     {% comment %} document
       .getElementById("searchIngredients")
@@ -129,35 +131,69 @@
       }); {% endcomment %}
 
     //search suggestion
-    function getSuggestions() {
-      const input = document.getElementById("searchIngredients").value;
-      if(input.length>0)
-      {
-        fetch(`/search/search_suggestions?q=${input}`)
-            .then(response => response.json())
-            .then(data=>{
-              console.log(data)
-              const ingredientList = document.querySelector(".ingredient-list");
-                ingredientList.innerHTML = ""; // Purana data hatao
+// Maintain selected ingredients globally
+{% comment %} let selectedIngredients = new Set(); {% endcomment %}
 
-                data.suggestions.forEach(ingredient => {
-                    ingredientList.innerHTML += `
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="${ingredient.name}" id="ing-${ingredient.id}">
-                            <label class="form-check-label" for="ing-${ingredient.id}">${ingredient.name}</label>
-                        </div>
-                    `;
-                });
+// When checkbox changes (tick/untick), update selectedIngredients
+function updateSelectedIngredients() {
+  const selectedDiv = document.getElementById("selectedIngredients");
 
-            }).catch(error => {
-              console.error('Error:', error);
-            });
-      }
-      console.log("sm")
-    }
+  if (selectedIngredients.size > 0) {
+    selectedDiv.innerHTML = Array.from(selectedIngredients)
+      .map((ing) => `<span class="badge bg-primary me-2 mb-2">${ing}</span>`)
+      .join("");
+
+    const ingredientsParam = encodeURIComponent(Array.from(selectedIngredients).join(","));
+    console.log("Redirecting to:", ingredientsParam);
+    window.location.href = `/search/fetch_recipes?ingredients=${ingredientsParam}`;
+  } else {
+    selectedDiv.innerHTML = "<em>No ingredients selected</em>";
+  }
+}
+
+
+function getSuggestions() {
+  const input = document.getElementById("searchIngredients").value;
+  console.log("Input:", input);
+  if (input.length > 0) {
+    fetch(`/search/search_suggestions?q=${input}`)
+      .then((response) => response.json())
+      .then((data) => {
+        const ingredientList = document.querySelector(".ingredient-list");
+        ingredientList.innerHTML = ""; // Clear old list
+
+        data.suggestions.forEach((ingredient) => {
+          const ingredientName = ingredient.name;
+
+          const checkboxHtml = `
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="${ingredientName}" id="ing-${ingredient.id}" ${selectedIngredients.has(ingredientName) ? "checked" : ""}>
+              <label class="form-check-label" for="ing-${ingredient.id}">${ingredientName}</label>
+            </div>
+          `;
+          ingredientList.insertAdjacentHTML("beforeend", checkboxHtml);
+        });
+
+        // Re-bind change event to all checkboxes
+        document.querySelectorAll('.ingredient-list input[type="checkbox"]').forEach((checkbox) => {
+          checkbox.addEventListener("change", () => {
+            if (checkbox.checked) {
+              selectedIngredients.add(checkbox.value);
+            } else {
+              selectedIngredients.delete(checkbox.value);
+            }
+          });
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+}
+
   
     // Update selected ingredients
-    function updateSelectedIngredients() {
+    {% comment %} function updateSelectedIngredients() {
       const selectedDiv = document.getElementById("selectedIngredients");
       const selected = [];
   
@@ -177,7 +213,7 @@
       } else {
         selectedDiv.innerHTML = "<em>No ingredients selected</em>";
       }
-    }
+    } {% endcomment %}
   </script>
 {% endblock %}
 

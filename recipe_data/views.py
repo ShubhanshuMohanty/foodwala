@@ -217,6 +217,13 @@ def delete_meal(request, title):
 class CreatePaymentView(LoginRequiredMixin, View):
     def post(self, request):
         # user = get_object_or_404(User, email=request.user.email)
+        data = json.loads(request.body)
+        return_url = data.get('return_url')
+        # response.set_cookie(return_url)
+        if return_url:
+            request.session['return_url'] = return_url
+        # request.session['return_url'] = request.build_absolute_uri()
+        print("\n\n\nrequest.session['return_url']=", request.session['return_url'])
         order_data = {
             "amount": int(200 * 100),
             "currency": "INR",
@@ -235,7 +242,7 @@ class CreatePaymentView(LoginRequiredMixin, View):
         #     razorpay_order_id=razorpay_order["id"],
         # )
         profile_data=Profile.objects.get(user__email=request.user.email)
-        return JsonResponse(
+        response= JsonResponse(
             {
                 "order_id": razorpay_order["id"],
                 "razorpay_key_id": settings.RAZORPAY_KEY_ID,
@@ -244,8 +251,11 @@ class CreatePaymentView(LoginRequiredMixin, View):
                 "razorpay_callback_url": settings.RAZORPAY_CALLBACK_URL,
                 "name": profile_data.name,
                 "phone": profile_data.phone,
+                "return_url":return_url,
             }
         )
+        response.set_cookie('return_url', return_url)
+        return response
 
 @method_decorator(csrf_exempt, name='dispatch')
 class PaymentCallbackView(View):
@@ -254,8 +264,11 @@ class PaymentCallbackView(View):
             order_id = request.POST.get("razorpay_order_id")
             payment_id = request.POST.get("razorpay_payment_id")
             signature = request.POST.get("razorpay_signature")
-
+            return_url=request.POST.get("return_url")
             order = get_object_or_404(premium_member, razorpay_order_id=order_id)
+            print("\n\n\norder=", order)
+            print("\n\n\nreturn_url=", return_url)
+
 
             if client.utility.verify_payment_signature({
             'razorpay_order_id': order_id,
@@ -267,7 +280,10 @@ class PaymentCallbackView(View):
                 order.razorpay_signature = signature
                 order.is_paid = True
                 order.save()
-                return JsonResponse({"status": "success"})
+                # return redirect(return_url)
+                # return_url = request.session.pop("return_url", "/search/")
+                return_url = request.COOKIES.get('return_url')
+                return redirect(return_url)
             else:
                 order.is_paid = False
                 order.save()

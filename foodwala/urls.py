@@ -10,6 +10,7 @@ urlpatterns = [
     path('users/', include('user_auth.urls'),name='users'),
     path('navbar/',views.navbar,name='navbar'),
     path("",include('allauth.urls')),
+    path('chat/',include('chat.urls'),name='chats'),
     # path('account/',include('accounts.urls')),
     # path('search/',search)
 ]
