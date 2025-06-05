@@ -240,32 +240,55 @@
 
 
           <!-- Profile Dropdown -->
-          <div class="dropdown">
-            <a
-              class="btn btn-outline-light dropdown-toggle d-flex align-items-center"
-              href="#"
-              role="button"
-              data-bs-toggle="dropdown"
-            >
-              <div class="profile-icon">
-                <i class="fas fa-user"></i>
-              </div>
-              Profile
+          {% if user.is_authenticated %}
+  <!-- Profile Dropdown -->
+            <div class="dropdown">
+              <a
+                class="btn btn-outline-light dropdown-toggle d-flex align-items-center"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+              >
+                <div class="profile-icon">
+                  <i class="fas fa-user"></i>
+                </div>
+                Profile
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                  <a class="dropdown-item" href="{% url 'profile' %}">
+                    <i class="fas fa-user-circle me-2"></i>My Profile
+                  </a>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item text-danger" href="{% url 'logout' %}">
+                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                  </a>
+                </li>
+              </ul>
+            </div>
+          {% else %}
+            <!-- Login Button -->
+            <a href="{% url 'login' %}" class="btn btn-outline-light">
+              <i class="fas fa-sign-in-alt me-2"></i>Login
             </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li>
-                <a class="dropdown-item" href="{% url 'profile' %}"
-                  ><i class="fas fa-user-circle me-2"></i>My Profile</a
-                >
-              </li>
-              <li><hr class="dropdown-divider" /></li>
-              <li>
-                <a class="dropdown-item text-danger" href="{% url 'logout' %}"
-                  ><i class="fas fa-sign-out-alt me-2"></i>Logout</a
-                >
-              </li>
-            </ul>
-          </div>
+          {% endif %}
+
+          <!-- Search Bar -->
+          {% comment %} <form class="d-flex ms-3" action="{% url 'search' %}" method="get">
+            <input
+              class="form-control me-2 search-bar"
+              type="search"
+              name="q"
+              placeholder="Search recipes..."
+              aria-label="Search"
+            />
+            <button class="btn btn-outline-light search-btn" type="submit">
+              <i class="fas fa-search"></i>
+            </button>
+          </form> {% endcomment %}
+
         </div>
       </div>
     </nav>

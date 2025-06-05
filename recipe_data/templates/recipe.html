@@ -183,14 +183,17 @@ background: linear-gradient( 0deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%
     
     try
     {
-      let response = await fetch('{% url "create_payment" %}', {method:"POST"})
+      const returnUrl = window.location.href;
+      let response = await fetch('{% url "create_payment" %}', {method:"POST",body: JSON.stringify({
+    return_url: returnUrl  // yeh bhejo
+  })})
       let data = await response.json()
       console.log("Payment data:",data)
       var options = {
         "key": data.razorpay_key_id,
         "amount": data.amount, 
         "currency": "INR",
-        "name": "Geeky Shows",
+        "name": "Recipe by Calories",
         "description": "Test Transaction",
         "order_id": data.order_id,
         "callback_url": data.razorpay_callback_url,
@@ -209,6 +212,7 @@ background: linear-gradient( 0deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%
       console.log("Options:",options)
       var rzp1 = new Razorpay(options);
       rzp1.open();
+      {% comment %} window.location.href=return_url {% endcomment %}
     }
     catch(error)
     {

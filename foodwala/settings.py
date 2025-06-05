@@ -31,6 +31,8 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'recipebycalories.onrender.com']
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,6 +47,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
+    'chat',
 ]
 AUTHENTICATION_BACKENDS = [
     
@@ -81,8 +84,17 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'foodwala.wsgi.application'
+# WSGI_APPLICATION = 'foodwala.wsgi.application'
+ASGI_APPLICATION = 'foodwala.asgi.application'
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
